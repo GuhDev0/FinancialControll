@@ -1,3 +1,9 @@
 export interface MyJwtPayload {
-  email: string;
+  id: number,
+  name: string,
+  email: string,
+  nascimento: Date,
+  cidade: string,
+  profissao: string,
+  rendaSalarial : number
 }

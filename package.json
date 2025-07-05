@@ -10,7 +10,7 @@
   "main": "server.ts",
   "devDependencies": {
     "@types/express": "^5.0.3",
-    "typeRoots": ["./node_modules/@types", "./app/@types"],
+    "typeRoots": ["./node_modules/@types", "./app/@types/express"],
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.10",
     "prisma": "^6.11.0",

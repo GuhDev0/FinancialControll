@@ -8,6 +8,19 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "./app",              
-    "outDir": "./dist"              
-  }
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*", "types/*"]
+    }
+  },
+  "include": [
+    "app/**/*",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

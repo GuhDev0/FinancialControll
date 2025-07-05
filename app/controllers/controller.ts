@@ -40,7 +40,9 @@ export default class ControllerRota{
     }
    
  loginAuth = async(req:Request,res:Response) =>{
+        
         const {email, senha} = req.body
+        const dados = await service.retornaInformacoesPeloEmailService(email) 
         try{
             const login =  await service.compararLogin(email,senha) 
 
@@ -49,9 +51,17 @@ export default class ControllerRota{
             }else{
                 
                 const jwtToken =  jsonwebtoken.sign(
-                {email : email},
+                {
+                    id : dados?.id,
+                    name : dados?.name,
+                    email : dados?.email,
+                    nascimento : dados?.dataNascimento,
+                    cidade : dados?.cidade,
+                    profissao : dados?.profissao,
+
+                },
                 CHAVE_SECRETA,
-                {expiresIn:"1m"});   
+                {expiresIn:"5m"});   
 
                 res.status(201).json({mensagem:"Acesso liberado", token: jwtToken})
             }     
@@ -77,9 +87,33 @@ authentication = (req:Request, res:Response, next:NextFunction) =>{
     };
 
     req.user = decoded as MyJwtPayload
-    next();         
+    next();        
+    return
     })
 }
+  
+rotaUser = async(req:Request, res:Response) => {
+   
+    const tokenDados = req.user
+
+    const userId = tokenDados?.id 
+
+    if(!userId){
+        return res.status(400).json({mensagem:"Usuario nao encontrado"})
+    }
+    
+    const dadosDB = await service.retornaInformacoesPeloIdService(userId)
+    
+    return res.json({mensagem : "Rota liberada", dadosDB})
+
+     
+}
+
 
 
 }
+
+
+
+
+

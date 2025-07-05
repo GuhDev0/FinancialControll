@@ -30,12 +30,16 @@ export default class Services{
     
     retornaInformacoesPeloEmailService = async (reqEmail:string) => {
         const informacoesUsuario = await repository.retornaInformacoesPeloEmail(reqEmail)        
-       console.log(informacoesUsuario)
+        console.log(informacoesUsuario)
         return informacoesUsuario
         
         
     }
 
+    retornaInformacoesPeloIdService = async(reqId:number)=>{
+        const informacoesUsuario = await repository.retornaInformacoesPeloId(reqId)
+        return informacoesUsuario 
+    }
 
        
 }
