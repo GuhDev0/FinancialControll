@@ -40,7 +40,20 @@ const trazerSalario = async () =>{
    
 }
 
+const retornaInformacoesPeloEmail = (reqEmail:string) => prisma.user.findFirst({
+    where:{
+        email : reqEmail
+    },select:{
+        name:true,
+        rendaSalarial:true,
+    }
+})
+
+const retornaListaDeEmail =  prisma.user.findMany({select:{email: true}})
+        
+const retornaListaDeSenha = prisma.user.findMany({select:{password:true }})
 
 
-export default {registrarNoBanco, deleteUser,trazerSalario }
+
+export default {registrarNoBanco, deleteUser,trazerSalario,retornaListaDeEmail, retornaListaDeSenha,retornaInformacoesPeloEmail}
 

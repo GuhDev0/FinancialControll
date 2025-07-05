@@ -11,6 +11,8 @@ router.post("/", controller.createUser)
 
 router.get("/", controller.calcularGastos)
 
+router.get("/login", controller.authentication ,controller.loginAuth)
+
 
 export default router
 

@@ -1,9 +1,11 @@
 
-import { Response, Request } from "express";
+import { Response, Request, NextFunction } from "express";
+
 import userDto from "../model/userDto"
 import Service from "../services/use.services"
-import jsonwebtoken from "jsonwebtoken"
+import jsonwebtoken, { JwtPayload } from "jsonwebtoken"
 import dotenv from "dotenv"
+import { MyJwtPayload } from "../model/myJwt";
 
 const CHAVE_SECRETA = "ADMIN"
 dotenv.config()
@@ -37,29 +39,47 @@ export default class ControllerRota{
  
     }
    
-    loginAuth = async(req:Request,res:Response) =>{
+ loginAuth = async(req:Request,res:Response) =>{
         const {email, senha} = req.body
         try{
             const login =  await service.compararLogin(email,senha) 
 
             if(!login.compararEmail || !login.compararSenha){
-                res.status(401).json("email ou senha icorretas")
+                res.status(401).json("email ou senha icorretas");
             }else{
-                res.status(201).json("Acesso liberado")
                 
-            }
-            const jwt =  jsonwebtoken.sign(
+                const jwtToken =  jsonwebtoken.sign(
                 {email : email},
                 CHAVE_SECRETA,
-                {expiresIn:"10m"})            
+                {expiresIn:"1m"});   
+
+                res.status(201).json({mensagem:"Acesso liberado", token: jwtToken})
+            }     
         }catch(error){
-                res.json(error)
-            }
-           
-        
-        
+                res.status(500).json({mensagem: error} )
+            }             
 }
 
+authentication = (req:Request, res:Response, next:NextFunction) =>{
+    const autheToken  = req.headers["authorization"]
+    
+    if(!autheToken){
+         res.status(401).json({mensagem: "Token não fornecido"})
+         return;
+    }
+
+    const token = autheToken.split(" ")[1]
+
+    jsonwebtoken.verify(token, CHAVE_SECRETA,(err,decoded) =>{
+    if(err){
+    res.json({mensagem : "Token invalido"})
+    return
+    };
+
+    req.user = decoded as MyJwtPayload
+    next();         
+    })
+}
 
 
 }
