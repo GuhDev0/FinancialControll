@@ -29,9 +29,24 @@ export default class ControllerRota{
         catch(error){
             res.status(500).json(error)
         }
-        
-        
+ 
     }
+   
+    loginAuth = async(req:Request,res:Response) =>{
+        const {email, senha} = req.body
+
+        const login =  await service.compararLogin(email,senha)
+
+        if(!login.compararEmail){
+            res.status(400).json("Informe um email valido")
+        }else if(!login.compararSenha){
+            res.status(400).json("informe uma senha valida")
+        }else{
+            res.status(201).json("Acesso liberado")
+        }
+        
 }
 
 
+
+}
