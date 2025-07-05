@@ -2,6 +2,11 @@
 import { Response, Request } from "express";
 import userDto from "../model/userDto"
 import Service from "../services/use.services"
+import jsonwebtoken from "jsonwebtoken"
+import dotenv from "dotenv"
+
+const CHAVE_SECRETA = "ADMIN"
+dotenv.config()
 
 const service = new Service();
 
@@ -11,7 +16,7 @@ export default class ControllerRota{
         try{
         const userRequest : userDto = req.body;    
         const user = await service.registerService(userRequest)
-        res.status(201).json("Servidor Criado com sucesso")
+        res.status(201).json("Registrado  com sucesso")
         }catch(error){
             console.error(error)
             res.status(400).json("voce deve informa os dados")
@@ -34,16 +39,24 @@ export default class ControllerRota{
    
     loginAuth = async(req:Request,res:Response) =>{
         const {email, senha} = req.body
+        try{
+            const login =  await service.compararLogin(email,senha) 
 
-        const login =  await service.compararLogin(email,senha)
-
-        if(!login.compararEmail){
-            res.status(400).json("Informe um email valido")
-        }else if(!login.compararSenha){
-            res.status(400).json("informe uma senha valida")
-        }else{
-            res.status(201).json("Acesso liberado")
-        }
+            if(!login.compararEmail || !login.compararSenha){
+                res.status(401).json("email ou senha icorretas")
+            }else{
+                res.status(201).json("Acesso liberado")
+                
+            }
+            const jwt =  jsonwebtoken.sign(
+                {email : email},
+                CHAVE_SECRETA,
+                {expiresIn:"10m"})            
+        }catch(error){
+                res.json(error)
+            }
+           
+        
         
 }
 
