@@ -13,7 +13,9 @@ router.post("/login", controller.loginAuth)
 
 router.get("/rotaUser", controller.authentication, controller.rotaUser)
 
-router.post("/registraGasto" , controller.authentication , controller.resumoDeGastos)
+router.post("/registraGasto" , controller.authentication , controller.registraGastos)
+
+router.get("/resumoDosGastos",controller.authentication, controller.resumoDeGastos)
 
 
 

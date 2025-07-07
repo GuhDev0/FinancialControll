@@ -43,13 +43,17 @@ export default class Services{
     }
 
     registrarGasto = async(dtoGasto:resumoDeGasto) =>{
-
-        const registradoNoDB = repository.registraGasto(dtoGasto)
-
-        
-        return console.log(registradoNoDB) 
+      
+         const registradoNoDB = await  repository.registraGasto(dtoGasto)    
+        return registradoNoDB
 
     }   
+
+    resumoDeGastos = async (id:number) =>{
+        const trazerResumo = await repository.retornaResumoDeGastos(id)
+        return trazerResumo
+    }
+
 }
 
 

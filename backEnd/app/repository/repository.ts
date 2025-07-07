@@ -83,11 +83,21 @@ const retornaInformacoesPeloId = (reqId:number) => prisma.user.findUnique({
     }
 })
 
+const retornaResumoDeGastos = (id:number) => prisma.resumoDeGastos.findMany({
+     where:{
+        userId : id
+     },select:{
+        nameDoGasto:true,
+        valorGasto:true,
+        dataDoGasto:true
+     }   
+})
+
 const retornaListaDeEmail =  prisma.user.findMany({select:{email: true}})
         
 const retornaListaDeSenha = prisma.user.findMany({select:{password:true }})
 
 
 
-export default {registrarNoBanco, deleteUser,trazerSalario,retornaListaDeEmail, retornaListaDeSenha,retornaInformacoesPeloEmail,retornaInformacoesPeloId,registraGasto}
+export default {registrarNoBanco, deleteUser,trazerSalario,retornaListaDeEmail, retornaListaDeSenha,retornaInformacoesPeloEmail,retornaInformacoesPeloId,registraGasto,retornaResumoDeGastos}
 

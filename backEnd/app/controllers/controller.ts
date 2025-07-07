@@ -113,7 +113,7 @@ rotaUser = async(req:Request, res:Response)  =>  {
      
 }
 
-resumoDeGastos = async (req:Request, res:Response) =>{
+registraGastos = async (req:Request, res:Response) =>{
     const { nameDoGasto, valorGasto} =   req.body
     const tokenDados = req.user
     const userId = tokenDados?.id
@@ -128,11 +128,27 @@ resumoDeGastos = async (req:Request, res:Response) =>{
           res.status(200).json({mensagem:"Sucesso no envio"})
         return
     }catch(error){
-        res.status(400).json({mensagem: "Informe os dados"})
+        res.status(400).json({mensagem: error})
         return
     }
 } 
 
+resumoDeGastos = async(req:Request,res:Response)=>{ 
+    const token = req.user
+    const userId = token?.id
+     if(!userId){
+        return res.status(401).json({mensagem: "Usuario invalido"})
+    }
+    
+    try{
+        const resumoFinal = await service.resumoDeGastos(token?.id)
+        res.status(201).json({mensagem: resumoFinal })  
+    }catch(error){
+        console.error(error)
+    }
+    
+
+}
 }
 
 
